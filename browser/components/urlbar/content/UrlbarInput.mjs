@@ -412,6 +412,10 @@ export class UrlbarInput extends HTMLElement {
       menuToolbar.addEventListener("DOMMenuBarInactive", this);
       menuToolbar.addEventListener("DOMMenuBarActive", this);
     }
+    this.window.document.documentElement.addEventListener(
+      "uidensitychanged",
+      this
+    );
 
     if (this.window.gBrowser) {
       // On startup, this will be called again by browser-init.js
@@ -504,6 +508,11 @@ export class UrlbarInput extends HTMLElement {
       menuToolbar.removeEventListener("DOMMenuBarInactive", this);
       menuToolbar.removeEventListener("DOMMenuBarActive", this);
     }
+    this.window.document.documentElement.removeEventListener(
+      "uidensitychanged",
+      this
+    );
+
     if (this.#gBrowserListenersAdded) {
       this.window.gBrowser.tabContainer.removeEventListener("TabSelect", this);
       this.window.gBrowser.tabContainer.removeEventListener("TabClose", this);
@@ -5166,6 +5175,13 @@ export class UrlbarInput extends HTMLElement {
     }
   }
 
+  _on_uidensitychanged(_event) {
+    if (this.#breakoutBlockerCount) {
+      return;
+    }
+    this.#updateLayoutBreakout();
+  }
+
   /**
    * Sanitize and process data retrieved from the clipboard
    *
@@ -5562,13 +5578,6 @@ export class UrlbarInput extends HTMLElement {
 
   _on_aftercustomization() {
     this.decrementBreakoutBlockerCount();
-    this.#updateLayoutBreakout();
-  }
-
-  uiDensityChanged() {
-    if (this.#breakoutBlockerCount) {
-      return;
-    }
     this.#updateLayoutBreakout();
   }
 

@@ -3263,8 +3263,7 @@ var gUIDensity = {
       }
     }
 
-    gBrowser.tabContainer.uiDensityChanged();
-    gURLBar.uiDensityChanged();
+    document.documentElement.dispatchEvent(new CustomEvent("uidensitychanged"));
   },
 };
 
