@@ -39,7 +39,9 @@ async function expectFocusAfterKey(
   let expected;
   let friendlyExpected;
   if (typeof aFocus == "string") {
-    expected = aWindow.document.getElementById(aFocus);
+    expected =
+      aWindow.document.getElementById(aFocus) ??
+      aWindow.document.querySelector(aFocus);
     friendlyExpected = aFocus;
   } else {
     expected = aFocus;
