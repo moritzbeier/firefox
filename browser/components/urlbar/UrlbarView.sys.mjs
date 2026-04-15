@@ -569,6 +569,7 @@ export class UrlbarView {
 
     this.input.removeAttribute("open");
     this.input.endLayoutExtend();
+    this.input.hidePopover();
 
     // Search Tips can open the view without the Urlbar being focused. If the
     // tip is ignored (e.g. the page content is clicked or the window loses
@@ -1205,6 +1206,7 @@ export class UrlbarView {
     this.controller.notify(this.controller.NOTIFICATIONS.VIEW_OPEN);
 
     this.maybeRollupPopups();
+    this.input.showPopover();
   }
 
   /**
