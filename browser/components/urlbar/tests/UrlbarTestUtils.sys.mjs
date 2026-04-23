@@ -2,7 +2,7 @@
    http://creativecommons.org/publicdomain/zero/1.0/ */
 
 /**
- * @import { PanelList } from "chrome://global/content/elements/panel-list.mjs"
+ * @import { PanelList,  PanelItem } from "chrome://global/content/elements/panel-list.mjs"
  */
 
 import { AppConstants } from "resource://gre/modules/AppConstants.sys.mjs";
@@ -1612,6 +1612,27 @@ class UrlbarInputTestUtils {
       this.searchModeSwitcherPopup(win),
       "hidden"
     );
+  }
+
+  /**
+   * @param {ChromeWindow} win
+   *   The search mode switcher's window.
+   * @param {string} selector
+   *   A CSS selector for the menu-item that should be activated.
+   * @returns {Promise<void>}
+   *   Resolved when the search mode switcher popup is hidden.
+   */
+  async activateSearchModeSwitcherItem(win, selector) {
+    this.info("Opening search mode switcher.");
+    let popup = await this.openSearchModeSwitcher(win);
+    let panelItem = /**@type {PanelItem}*/ (popup.querySelector(selector));
+    if (!panelItem || panelItem.tagName != "panel-item") {
+      throw new Error("No matches for selector");
+    }
+    this.info("Closing search mode switcher.");
+    let popupHidden = this.searchModeSwitcherPopupClosed(win);
+    panelItem.click();
+    await popupHidden;
   }
 
   /**
