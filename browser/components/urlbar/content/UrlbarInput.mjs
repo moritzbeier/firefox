@@ -383,7 +383,6 @@ ${
     // type definitions.
     const READ_WRITE_PROPERTIES = [
       "placeholder",
-      "readOnly",
       "selectionStart",
       "selectionEnd",
     ];
@@ -428,11 +427,7 @@ ${
 
     // Don't attach event listeners if the toolbar is not visible
     // in this window or the urlbar is readonly.
-    if (
-      !this.window.toolbar.visible ||
-      this.window.document.documentElement.hasAttribute("taskbartab") ||
-      this.readOnly
-    ) {
+    if (!this.window.toolbar.visible || this.readOnly) {
       this.#stopBreakout();
       return;
     }
@@ -661,10 +656,20 @@ ${
    */
   placeholder;
 
+  set readOnly(val) {
+    if (val != this.inputField.readOnly) {
+      this.inputField.readOnly = val;
+      this.#disconnectedCallback();
+      this.#connectedCallback();
+    }
+  }
+
   /**
-   * @type {typeof HTMLInputElement.prototype.readOnly}
+   * @type {boolean}
    */
-  readOnly;
+  get readOnly() {
+    return this.inputField.readOnly;
+  }
 
   /**
    * @type {typeof HTMLInputElement.prototype.selectionStart}
