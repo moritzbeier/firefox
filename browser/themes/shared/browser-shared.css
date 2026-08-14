@@ -169,6 +169,11 @@ body {
   @media (prefers-reduced-motion) {
     --inactive-window-transition: 0s;
   }
+  /* The window becomes active for the first time during startup. Animating that
+     paints the toolbox and the window background in separate frames. */
+  &:not([sessionrestored]) {
+    --inactive-window-transition: 0s;
+  }
 
   &[lwtheme] {
     /* Theme colors don't need to use design tokens. */
